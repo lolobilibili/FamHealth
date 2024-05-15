@@ -26,3 +26,7 @@ class sport(models.Model):
   date = models.DateField(primary_key=True)
   hot = models.IntegerField(default = 0)
   des = models.CharField(max_length=1000)
+
+class User(models.Model):
+  username = models.CharField(max_length=100)
+  password = models.CharField(max_length=500)

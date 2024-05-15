@@ -5,6 +5,7 @@ from rest_framework.response import Response
 import os
 from . import models
 from django.utils.timezone import localtime
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -395,3 +396,25 @@ def sub2(request):
         data.append({'hot':0,'des':''})
     print(data)
     return Response(data)
+
+def login(request):
+	username = request.POST.get("username")
+	password = request.POST.get("password")
+	print(username)
+	print(password)
+	try:
+		user = models.User.objects.get(username=username)
+	except:
+		date = {'flag': 'no', "msg" : "no to user"}
+		return JsonResponse({'request':date})
+	if password == user.password:
+		date_msg = "登陆成功"
+		date_flag = "yes"
+		print("成功")
+	else:
+		date_msg = "密码输入错误"
+		date_flag = "no"
+	date = {'flag':date_flag,'msg': date_msg}
+
+	return JsonResponse({'request': date})
+

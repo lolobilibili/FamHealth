@@ -26,4 +26,5 @@ urlpatterns = [
     path('button/', views.btn),
     path('submit/',views.sub),
     path('submit2/',views.sub2),
+    path('login/',views.login)
 ]

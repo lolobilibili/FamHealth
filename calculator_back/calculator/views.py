@@ -3,6 +3,8 @@ import pandas as pd
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import os
+from . import models
+from django.utils.timezone import localtime
 
 # Create your views here.
 
@@ -317,3 +319,79 @@ def btn(request):
 
     return Response(data)
 
+@api_view(['GET'])
+def sub(request):
+    name = int(request.GET.get("name"))
+    date = request.GET.get("date")
+    desc = str(request.GET.get("desc"))
+    input = int(request.GET.get("input"))
+    print(name,date,desc,input)
+    date = date[0:10]
+    if name==1:
+        data =models.breakfast.objects.filter(date =date)
+        if data:
+            models.breakfast.objects.filter(date=date).update(des= desc,hot = input)
+        else:
+            models.breakfast.objects.create(date = date,des = desc,hot = input)
+    if name==2:
+        data =models.lunch.objects.filter(date =date)
+        if data:
+            models.lunch.objects.filter(date=date).update(des= desc,hot = input)
+        else:
+            models.lunch.objects.create(date = date,des = desc,hot = input)
+    if name==3:
+        data =models.dinner.objects.filter(date =date)
+        if data:
+            models.dinner.objects.filter(data=data).update(des= desc,hot = input)
+        else:
+            models.dinner.objects.create(date = date,des = desc,hot = input)
+    if name==4:
+        data =models.snack.objects.filter(date =date)
+        if data:
+            models.snack.objects.filter(data=data).update(des= desc,hot = input)
+        else:
+            models.snack.objects.create(date = date,des = desc,hot = input)
+    if name==5:
+        data =models.sport.objects.filter(date =date)
+        if data:
+            models.sport.objects.filter(data=data).update(des= desc,hot = input)
+        else:
+            models.sport.objects.create(date = date,des = desc,hot = input)
+    return Response('成功')
+
+@api_view(['GET'])
+def sub2(request):
+    date = request.GET.get("date")
+
+    date = date[0:10]
+    print(date)
+    
+    data = []
+    #获取五种行动消耗的热量和对应的描述
+    breakfast= models.breakfast.objects.filter(date = date).values('hot','des')
+    lunch= models.lunch.objects.filter(date = date).values('hot','des')
+    dinner= models.dinner.objects.filter(date = date).values('hot','des')
+    snack= models.snack.objects.filter(date = date).values('hot','des')
+    sport= models.sport.objects.filter(date = date).values('hot','des')
+    if breakfast:
+        data.append({'hot':breakfast[0]['hot'],'des':breakfast[0]['des']})
+    else:
+        data.append({'hot':0,'des':''})
+    if lunch:
+        data.append({'hot':lunch[0]['hot'],'des':lunch[0]['des']})
+    else:
+        data.append({'hot':0,'des':''})
+    if dinner:
+        data.append({'hot':dinner[0]['hot'],'des':dinner[0]['des']})
+    else:
+        data.append({'hot':0,'des':''})
+    if snack:
+        data.append({'hot':snack[0]['hot'],'des':snack[0]['des']})
+    else:
+        data.append({'hot':0,'des':''})
+    if sport:
+        data.append({'hot':sport[0]['hot'],'des':sport[0]['des']})
+    else:
+        data.append({'hot':0,'des':''})
+    print(data)
+    return Response(data)

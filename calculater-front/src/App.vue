@@ -118,7 +118,7 @@ export default{
     }
   },
   mounted(){
-    document.title = "SUpye"
+    document.title = "体测小助手"
   },
   methods: {
     submitting(value){

@@ -24,4 +24,6 @@ urlpatterns = [
     path('data/', views.get_data),
     path('advise/', views.advise),
     path('button/', views.btn),
+    path('submit/',views.sub),
+    path('submit2/',views.sub2),
 ]

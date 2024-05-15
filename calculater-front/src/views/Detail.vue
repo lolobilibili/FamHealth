@@ -6,13 +6,17 @@
     <!-- 弹窗 -->
   <el-popover
     placement="left-end"
-    title="上海财经大学体测评分表（2024）"
+    title="毁了吧，真是小飞舞，看你打那点分，对个勾勾"
     width="640"
     trigger="click"
-    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" style="position: absolute; right:350px;top:0px; z-index: 1; width: 220px; height: 200px">
+    content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" style="position: absolute; right:550px;top:0px; z-index: 1; width: 150px; height: 200px">
       <ScoreTables></ScoreTables>
-    <el-button slot="reference">点击查看体测评分表</el-button>
+    <el-button slot="reference">分数很低？来对对分数吧</el-button>
+    
   </el-popover>
+<el-button type="primary" @click="go_plan" style="position:absolute;right:350px; z-index:1;">我的健身计划</el-button>
+<el-button type="primary" @click="go_chat" style="position:absolute;right:150px; z-index:1;">看看AI怎么说</el-button>
+
 
     <img src="../../public/source/recommend.png"  style="position: absolute; right:575px;top:36px; z-index: -1; width: 200px; height: 55px" />
     <div class="title" style="position: absolute; left:20px;top:30px; z-index: 1;" @click="go_back">
@@ -30,7 +34,7 @@
           </ul>
           <ul v-else>
             <div style="margin:5px 0;color:#555;font-family:gb5;width:600px;">
-              <li class="li_item" style="font-family:'gb5';">当前成绩优秀，请继续保持。如需提升专项运动表现，请访问专项锻炼栏目。</li>
+              <li class="li_item" style="font-family:'gb5';">同学你是个体育天才吧！！！</li>
             </div>
             
           </ul>
@@ -75,7 +79,7 @@
         
         <div class="recommend_allscore">
           <div class="allscore_hint" style="font-size:26px;">
-            预期总分
+            总分
           </div>
           <div style=" margin-left: 350px;">
             {{this.new_recommend_data.all_score.score}}
@@ -157,9 +161,29 @@ export default {
         if(suggestion_array[i]!=""){
           suggestion_array_new.push(suggestion_array[i])
         }
+        
       }
+      
       this.suggestion=suggestion_array_new
     },
+    go_plan(){
+        //跳转到分析的页面
+        
+        setTimeout(()=>{
+          //进行route的push跳转
+          this.$router.push({path:'/plan'})
+          
+        },2000)
+      },
+      go_chat(){
+        //跳转到分析的页面
+        
+        setTimeout(()=>{
+          //进行route的push跳转
+          this.$router.push({path:'/chatbase'})
+          
+        },2000)
+      },
     async get_change_data(data,index){
       //获取后端第三个接口，当用户点击左右按钮
       await this.$http.get('/button/',{
@@ -308,7 +332,7 @@ export default {
       
       const option = {
           title: {
-            text: '当前总分',
+            text: '总分为',
             subtext:all_score_tem.score,
             left: 'center',
             top: 'center',

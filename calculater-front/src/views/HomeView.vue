@@ -2,7 +2,8 @@
   <div class="home" style="margin:0px;display:flex;justify-content:space-around;height:100vh;">
     <img src="../../public/source/project_name.png"  style="position: absolute; left:110px;top:130px; z-index: -1; width: 180px; height: 500px" />
     <!-- <img src="../../public/source/team_name.png"  style="position: absolute; left:10px;top:8px; z-index: -1; width: 240px; height: 60px" /> -->
-    <img src="../../public/source/cover-modified.png"  style="position: absolute; right:60px;top:230px; z-index: -1; width: 330px; height: 280px" />
+    <img src="../../public/source/author.png"  style="position: absolute; right:20px;bottom:12px; z-index: -1; width: 260px; height: 60px" />
+    <img src="../../public/source/makabaka.gif"  style="position: absolute; right:120px;top:230px; z-index: -1; width: 230px; height: 280px" />
     <img src="../../public/source/background1.jpg"  style="position: absolute; z-index: -10; width: 100%; height: 760px;"  />
     <img src="../../public/source/Sufe.png"  style="position: absolute; right:10px;top:-80px; z-index: -1; width: 220px; height: 230px" />
     <div id="d1" class="whole" style="margin:0px;display:flex;justify-content:space-around;" transition-style>
@@ -87,6 +88,7 @@
             <el-form-item >
               <el-button type="primary" @click="submitForm('ruleForm')" style="margin-left:-310px;margin-top:13px;">立即创建</el-button>
               <el-button @click="clear_data" style="margin-left:20px;">重置</el-button>
+              <el-button type="primary" @click="go_chat" style="margin-left:-310px;margin-top:13px;">问问机器人</el-button>
             </el-form-item> 
           </div>
           <!-- <div class="enity">
@@ -506,6 +508,17 @@ export default {
         setTimeout(()=>{
           //进行route的push跳转
           this.$router.push({path:'/detail',query: {data:this.result_data,pass_data:this.pass_data}})
+          
+        },2000)
+      },
+      go_chat(){
+        //跳转到分析的页面
+        var div = document.getElementById('d1');
+          div.setAttribute("class", "--in-custom whole");
+        
+        setTimeout(()=>{
+          //进行route的push跳转
+          this.$router.push({path:'/chatbase'})
           
         },2000)
       },

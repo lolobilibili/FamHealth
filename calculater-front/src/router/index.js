@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import chatbase from '../components/chatbase.vue'
 import login from '../components/login.vue'
+import nav from '../components/nav.vue'
+import fnotice from '../components/fnotice.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,6 +42,22 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: chatbase
+  },
+  {
+    path: '/nav',
+    name: 'nav',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: nav
+  },
+  {
+    path: '/fnotice',
+    name: 'fnotice',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: fnotice
   },
 ]
 

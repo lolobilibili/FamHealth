@@ -417,4 +417,15 @@ def login(request):
 	date = {'flag':date_flag,'msg': date_msg}
 
 	return JsonResponse({'request': date})
-
+@api_view(['GET'])
+def fnotice(request):
+    username = request.GET.get("username")
+    print(username)
+    data = []
+    id = models.User_group.objects.filter(username = username).values('group_id')
+    print(id[0]['group_id'])
+    lists = models.User_group.objects.filter(group_id = id[0]['group_id']).values('username','text')
+    print(lists)
+    for l in lists:
+        data.append({'username':l['username'],'text':l['text']})
+    return Response(data)

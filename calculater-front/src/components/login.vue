@@ -49,13 +49,16 @@
         this.$refs[formName].validate((valid) =>{
           if (valid){
             const _this = this
+           
             var data = Qs.stringify({"username":this.ruleForm.username,"password":this.ruleForm.password})
+            var data1 =  {username:this.ruleForm.username}
             this.$http.post("/login/",data).then(
               function (resp) {
                 const flag = resp.data.request['flag']
                 if (flag == 'yes'){
                   // console.log(resp.data.request['flag'])
-                  _this.$router.push("/home")
+                 
+                  _this.$router.push({path:"/nav",query:data1})
                 }else {
                   alert("错误登录")
                 }
@@ -75,7 +78,8 @@
   }
 </script>
 <style>
-body{
+.loginbox{
+  height: 100vh;
   background:url('../../public/source/6.jpg') no-repeat center center fixed; background-size: 100%;
 
 }

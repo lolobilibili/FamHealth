@@ -18,6 +18,7 @@ class dinner(models.Model):
   des = models.CharField(max_length=1000)
 
 class snack(models.Model):
+  
   date = models.DateField(primary_key=True)
   hot = models.IntegerField(default = 0)
   des = models.CharField(max_length=1000)
@@ -30,3 +31,8 @@ class sport(models.Model):
 class User(models.Model):
   username = models.CharField(max_length=100)
   password = models.CharField(max_length=500)
+
+class User_group(models.Model):
+  username = models.CharField(max_length=100)
+  group_id = models.IntegerField(default= 0)
+  text  = models.TextField(default="")

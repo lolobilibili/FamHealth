@@ -326,54 +326,55 @@ def sub(request):
     date = request.GET.get("date")
     desc = str(request.GET.get("desc"))
     input = int(request.GET.get("input"))
+    username = request.GET.get("username")
     print(name,date,desc,input)
     date = date[0:10]
     if name==1:
-        data =models.breakfast.objects.filter(date =date)
+        data =models.breakfast.objects.filter(date =date,username = username)
         if data:
-            models.breakfast.objects.filter(date=date).update(des= desc,hot = input)
+            models.breakfast.objects.filter(date=date,username = username).update(des= desc,hot = input)
         else:
-            models.breakfast.objects.create(date = date,des = desc,hot = input)
+            models.breakfast.objects.create(date = date,des = desc,hot = input,username = username)
     if name==2:
-        data =models.lunch.objects.filter(date =date)
+        data =models.lunch.objects.filter(date =date,username = username)
         if data:
-            models.lunch.objects.filter(date=date).update(des= desc,hot = input)
+            models.lunch.objects.filter(date=date,username = username).update(des= desc,hot = input)
         else:
-            models.lunch.objects.create(date = date,des = desc,hot = input)
+            models.lunch.objects.create(date = date,des = desc,hot = input,username = username)
     if name==3:
-        data =models.dinner.objects.filter(date =date)
+        data =models.dinner.objects.filter(date =date,username = username)
         if data:
-            models.dinner.objects.filter(data=data).update(des= desc,hot = input)
+            models.dinner.objects.filter(data=data,username = username).update(des= desc,hot = input)
         else:
-            models.dinner.objects.create(date = date,des = desc,hot = input)
+            models.dinner.objects.create(date = date,des = desc,hot = input,username = username)
     if name==4:
-        data =models.snack.objects.filter(date =date)
+        data =models.snack.objects.filter(date =date,username = username)
         if data:
-            models.snack.objects.filter(data=data).update(des= desc,hot = input)
+            models.snack.objects.filter(data=data,username = username).update(des= desc,hot = input)
         else:
-            models.snack.objects.create(date = date,des = desc,hot = input)
+            models.snack.objects.create(date = date,des = desc,hot = input,username = username)
     if name==5:
-        data =models.sport.objects.filter(date =date)
+        data =models.sport.objects.filter(date =date,username = username)
         if data:
-            models.sport.objects.filter(data=data).update(des= desc,hot = input)
+            models.sport.objects.filter(data=data,username = username).update(des= desc,hot = input)
         else:
-            models.sport.objects.create(date = date,des = desc,hot = input)
+            models.sport.objects.create(date = date,des = desc,hot = input,username = username)
     return Response('成功')
 
 @api_view(['GET'])
 def sub2(request):
     date = request.GET.get("date")
-
+    username = request.GET.get("username")
     date = date[0:10]
     print(date)
     
     data = []
     #获取五种行动消耗的热量和对应的描述
-    breakfast= models.breakfast.objects.filter(date = date).values('hot','des')
-    lunch= models.lunch.objects.filter(date = date).values('hot','des')
-    dinner= models.dinner.objects.filter(date = date).values('hot','des')
-    snack= models.snack.objects.filter(date = date).values('hot','des')
-    sport= models.sport.objects.filter(date = date).values('hot','des')
+    breakfast= models.breakfast.objects.filter(date = date,username = username).values('hot','des')
+    lunch= models.lunch.objects.filter(date = date,username = username).values('hot','des')
+    dinner= models.dinner.objects.filter(date = date,username = username).values('hot','des')
+    snack= models.snack.objects.filter(date = date,username = username).values('hot','des')
+    sport= models.sport.objects.filter(date = date,username = username).values('hot','des')
     if breakfast:
         data.append({'hot':breakfast[0]['hot'],'des':breakfast[0]['des']})
     else:

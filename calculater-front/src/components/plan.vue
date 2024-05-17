@@ -132,7 +132,7 @@ export default {
           label: '运动'
         }],
 
-        value1: new Date(),
+        value1: new Date(new Date(new Date().toLocaleDateString()).getTime()),
         breakfast:{},
         lunch:{},
         dinner:{},
@@ -145,11 +145,14 @@ export default {
 
 
           desc: '',
-          input:''
-        }
+          input:'',
+          username:this.$route.query.username
+        },
+        
       };
     },
   mounted(){
+    
     this.onSubmit2()
   },
     methods:{
@@ -171,7 +174,7 @@ export default {
       async onSubmit2(){
         console.log(this.value1)
          await this.$http.get('/submit2/',{
-          params:{date:this.value1}
+          params:{date:this.value1,username:this.form.username}
         })
           .then(response =>{
         console.log(response.request.status)

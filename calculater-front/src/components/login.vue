@@ -1,9 +1,8 @@
 <template>
   <div class="loginbox" style="text-align: center;" >
-    
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="width: 30%;display: inline-block">
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" label-height="500px" class="demo-ruleForm" style="width: 40%;position:absolute;top:20%;left:9.5%;transform:translate(50%,50%);">
       <el-form-item>
-        <h1>登录</h1>
+        <h1>用户登录</h1>
       </el-form-item>
 
       <el-form-item label="" prop="username">
@@ -80,8 +79,10 @@
 <style>
 .loginbox{
   height: 100vh;
+  width: 100%;
   background:url('../../public/source/6.jpg') no-repeat center center fixed; background-size: 100%;
 
 }
+
 </style>
 

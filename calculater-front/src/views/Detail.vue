@@ -2,20 +2,20 @@
 <template>
   <div class="about">
     <img src="../../public/source/background5.jpg"  style="position: fixed; z-index: -10; width: 100%; height: 100%" />
-    <img src="../../public/source/Sufe.png"  style="position: absolute; right:10px;top:-60px; z-index: -1; width: 220px; height: 200px" />
+    <img src="../../public/source/Sufe.png"  style="position: absolute;  right:60px;top:0px; z-index: -1; width: 20%; height: 15%"  />
     <!-- 弹窗 -->
   <el-popover
     placement="left-end"
-    title="毁了吧，真是小飞舞，看你打那点分，对个勾勾"
+    title="大学生运动表现参考标准"
     width="640"
     trigger="click"
     content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。" style="position: absolute; right:550px;top:0px; z-index: 1; width: 150px; height: 200px">
       <ScoreTables></ScoreTables>
-    <el-button slot="reference">分数很低？来对对分数吧</el-button>
+    <el-button slot="reference">大学生运动健康标准</el-button>
     
   </el-popover>
 <el-button type="primary" @click="go_plan" style="position:absolute;right:350px; z-index:1;">我的健身计划</el-button>
-<el-button type="primary" @click="go_chat" style="position:absolute;right:150px; z-index:1;">看看AI怎么说</el-button>
+<el-button type="primary" @click="go_chat" style="position:absolute;right:850px; z-index:1;">看看AI怎么说</el-button>
 
 
     <img src="../../public/source/recommend.png"  style="position: absolute; right:575px;top:36px; z-index: -1; width: 200px; height: 55px" />
@@ -34,7 +34,7 @@
           </ul>
           <ul v-else>
             <div style="margin:5px 0;color:#555;font-family:gb5;width:600px;">
-              <li class="li_item" style="font-family:'gb5';">同学你是个体育天才吧！！！</li>
+              <li class="li_item" style="font-family:'gb5';">运动表现非常好，请继续保持！</li>
             </div>
             
           </ul>
@@ -79,7 +79,7 @@
         
         <div class="recommend_allscore">
           <div class="allscore_hint" style="font-size:26px;">
-            总分
+            推荐后运动表现：
           </div>
           <div style=" margin-left: 350px;">
             {{this.new_recommend_data.all_score.score}}
@@ -332,7 +332,7 @@ export default {
       
       const option = {
           title: {
-            text: '总分为',
+            text: '运动表现分',
             subtext:all_score_tem.score,
             left: 'center',
             top: 'center',

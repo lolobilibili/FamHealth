@@ -1,6 +1,6 @@
 <template>
   <div class="fnotice">
-    <el-row>
+    <el-row >
       <el-col :span="6" v-for="item in lists" :key="item.name"
         ><el-card :body-style="{ padding: '0px', marginBottom: '1px' }">
             <div style="padding: 14px">
@@ -19,8 +19,8 @@
     </el-row> 
     <el-input
       type="textarea"
-      :rows="2"
-      style="width:60%;font-size:18px;"
+      :rows="4"
+      style="width:75%;font-size:18px;"
       placeholder="请输入内容"
       v-model="textarea"
     >

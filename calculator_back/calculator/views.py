@@ -421,12 +421,21 @@ def login(request):
 @api_view(['GET'])
 def fnotice(request):
     username = request.GET.get("username")
-    print(username)
+    
     data = []
     id = models.User_group.objects.filter(username = username).values('group_id')
-    print(id[0]['group_id'])
+    
     lists = models.User_group.objects.filter(group_id = id[0]['group_id']).values('username','text')
-    print(lists)
+    
     for l in lists:
         data.append({'username':l['username'],'text':l['text']})
     return Response(data)
+
+@api_view(['GET'])
+def update_notice(request):
+    username  = request.GET.get("username")
+    print(username)
+    text = request.GET.get("textarea")
+    print(username)
+    models.User_group.objects.filter(username = username).update(text = text)
+    return Response()

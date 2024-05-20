@@ -27,5 +27,6 @@ urlpatterns = [
     path('submit/',views.sub),
     path('submit2/',views.sub2),
     path('login/',views.login),
-    path('fnotice/',views.fnotice)
+    path('fnotice/',views.fnotice),
+    path('update_notice/',views.update_notice)
 ]

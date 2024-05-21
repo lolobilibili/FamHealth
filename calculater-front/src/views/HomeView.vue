@@ -273,6 +273,7 @@
 </template>
 
 <script>
+import router from '@/router';
 // @ is an alias to /src
 
 
@@ -429,6 +430,8 @@ export default {
   },
   mounted() {
     this.username=this.$route.query.username
+    this.get_data_by_username(this.username)
+    
   },
   methods: {
    
@@ -551,6 +554,22 @@ export default {
         console.log(error)
         })
         console.log("********")
+      },
+      async get_data_by_username(username){
+        await this.$http.get('/get_user_data/',{
+          params:{username:username}
+        }).then(response =>{
+          console.log(response.data)
+          this.ruleForm.rule_data[2].value=String(response.data[1].performance)
+          this.ruleForm.rule_data[3].value=String(response.data[3].performance)
+          this.ruleForm.rule_data[4].value=String(response.data[5].performance)
+          this.ruleForm.rule_data[5].value=String(response.data[2].performance)
+          this.ruleForm.rule_data[6].value=String(response.data[4].performance)
+          this.ruleForm.run_1000.run_1000_min = Math.floor(response.data[6].num_performance/1)
+          this.ruleForm.run_1000.run_1000_sec = parseInt(response.data[6].num_performance%1*100)
+        }).catch(error =>{
+          console.log(error)
+        })
       }
         
   }

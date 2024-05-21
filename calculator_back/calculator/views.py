@@ -6,7 +6,10 @@ import os
 from . import models
 from django.utils.timezone import localtime
 from django.http import JsonResponse
-
+from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from drf_yasg.openapi import Parameter, IN_PATH, IN_QUERY, TYPE_STRING, TYPE_INTEGER
 # Create your views here.
 
 # 读取项目所需文件
@@ -264,8 +267,10 @@ def get_data(request):
     Pull_ups_and_sit_ups = float(request.GET.get("Pull_ups_and_sit_ups"))
     run_1000 = float(request.GET.get("run_1000"))
     label = str(request.GET.get("label"))
+    username = str(request.GET.get("username"))
     performance, all_score = Cal_score(label, bmi, vital_capacity, run_50, sit_and_reach, jump, Pull_ups_and_sit_ups,run_1000)
     # all_score_new = all_score
+
     score = all_score.pop()
     each_score = all_score
     suggestion = give_suggest(label, each_score)
@@ -279,7 +284,88 @@ def get_data(request):
         {'name': 'run_1000', 'num_performance': performance[6], 'performance': numTorun(performance[6]), 'score': all_score[6]},
         {'name': 'score', 'score': round(score,2),'suggestion':suggestion},
     ]
+    models.Score_record.objects.update_or_create(
+        username=username,
+        defaults={'bmi':round(performance[0],2),'vital_capacity':performance[1],'run_50':performance[2],'sit_and_reach':performance[3],'jump':performance[4],'Pull_ups_and_sit_ups':performance[5],'run_1000':performance[6],'run_1000_performance':numTorun(performance[6]),'bmi_score':all_score[0],'vital_capacity_score':all_score[1],'run_50_score':all_score[2],'sit_and_reach_score':all_score[3],'jump_score':all_score[4],'Pull_ups_and_sit_ups_score':all_score[5],'run_1000_score':all_score[6],'score':score,'suggestion':suggestion}
+    )
     return Response(data)
+
+polygon_view_get_desc='获取当前对象的历史成绩'
+polygon_view_get_parm=[
+    Parameter(name='username',in_=IN_QUERY,description='输入用户名',type=openapi.TYPE_STRING,required=True),
+
+]
+
+@swagger_auto_schema(method='get',operation_description=polygon_view_get_desc,manual_parameters=polygon_view_get_parm,operation_summary="获取当前对象的历史成绩")
+@api_view(['GET'])
+def get_data_by_username(request):
+    
+    username = str(request.GET.get("username"))
+    data=models.Score_record.objects.filter(username=username)[0]
+    # print(data[0].bmi)
+    data = [
+        {'name': 'bmi', 'performance': data.bmi, 'score': data.bmi_score},
+        {'name': 'vital_capacity', 'performance': data.vital_capacity, 'score': data.vital_capacity_score}, 
+        {'name': 'run_50', 'performance': data.run_50, 'score': data.run_50_score},
+        {'name': 'sit_and_reach', 'performance': data.sit_and_reach, 'score': data.sit_and_reach_score},
+        {'name': 'jump', 'performance': data.jump, 'score': data.jump_score},
+        {'name': 'Pull_ups_and_sit_ups', 'performance': data.Pull_ups_and_sit_ups, 'score': data.Pull_ups_and_sit_ups_score},
+        {'name': 'run_1000', 'num_performance': data.run_1000, 'performance': data.run_1000_performance, 'score': data.run_1000_score},
+        {'name': 'score', 'score':data.score,'suggestion':data.suggestion},
+    ]
+    # models.Score_record.objects.update_or_create(
+    #     username=username,
+    #     defaults={'bmi':round(performance[0],2),'vital_capacity':performance[1],'run_50':performance[2],'sit_and_reach':performance[3],'jump':performance[4],'Pull_ups_and_sit_ups':performance[5],'run_1000':performance[6],'run_1000_performance':numTorun(performance[6]),'bmi_score':all_score[0],'vital_capacity_score':all_score[1],'run_50_score':all_score[2],'sit_and_reach_score':all_score[3],'jump_score':all_score[4],'Pull_ups_and_sit_ups_score':all_score[5],'run_1000_score':all_score[6]}
+    # )
+    return Response(data)
+
+polygon_view_get_desc='获取当前对象所在组所有成员的成绩'
+polygon_view_get_parm=[
+    Parameter(name='username',in_=IN_QUERY,description='输入用户名',type=openapi.TYPE_STRING,required=True),
+
+]
+
+@swagger_auto_schema(method='get',operation_description=polygon_view_get_desc,manual_parameters=polygon_view_get_parm,operation_summary="获取当前对象所在组所有成员的成绩")
+@api_view(['GET'])
+def get_data_by_group(request):
+    
+    username = str(request.GET.get("username"))
+    def get_user_group_members(username):
+        # 获取给定用户名的用户
+        user = get_object_or_404(models.User_group, username=username)
+
+        # 获取该用户所属的所有组
+        user_groups = user.group_id
+
+        # 获取所有属于这些组的用户，排除自己
+        group_users = models.User_group.objects.filter(group_id=user_groups).distinct()
+
+        # 提取这些用户的用户名
+        usernames = group_users.values_list('username', flat=True)
+
+        return list(usernames)
+    # data=models.Score_record.objects.filter(username=username)
+    # print(data[0].bmi)
+    users=get_user_group_members(username)
+    print(users)
+    records=models.Score_record.objects.filter(username__in=users)
+    result=[]
+    for data in records:
+        item = [
+        {'username':data.username},
+        {'name': 'bmi', 'performance': data.bmi, 'score': data.bmi_score},
+        {'name': 'vital_capacity', 'performance': data.vital_capacity, 'score': data.vital_capacity_score}, 
+        {'name': 'run_50', 'performance': data.run_50, 'score': data.run_50_score},
+        {'name': 'sit_and_reach', 'performance': data.sit_and_reach, 'score': data.sit_and_reach_score},
+        {'name': 'jump', 'performance': data.jump, 'score': data.jump_score},
+        {'name': 'Pull_ups_and_sit_ups', 'performance': data.Pull_ups_and_sit_ups, 'score': data.Pull_ups_and_sit_ups_score},
+        {'name': 'run_1000', 'num_performance': data.run_1000, 'performance': data.run_1000_performance, 'score': data.run_1000_score},
+        {'name': 'score', 'score': data.score,'suggestion':data.suggestion},
+    ]
+        result.append(item)
+
+    return Response(result)
+
 
 
 @api_view(['GET'])
@@ -304,6 +390,7 @@ def advise(request):
         {'name': 'run_1000', 'num_performance': performance[6], 'performance': numTorun(performance[6]), 'score': each_score[6]},
         {'name': 'score', 'score': round(score,2)},
     ]
+
     return Response(data)
 
 @api_view(['GET'])
@@ -398,6 +485,24 @@ def sub2(request):
     print(data)
     return Response(data)
 
+
+
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['username', 'password'],
+        properties={
+            'username': openapi.Schema(type=openapi.TYPE_STRING,description='e: 造林更新'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING,description='变化原因 example: 造林更新'),
+        },
+
+    ),
+    operation_summary='登录',
+)
+@api_view(['POST'])
 def login(request):
 	username = request.POST.get("username")
 	password = request.POST.get("password")
@@ -430,3 +535,12 @@ def fnotice(request):
     for l in lists:
         data.append({'username':l['username'],'text':l['text']})
     return Response(data)
+
+@api_view(['GET'])
+def update_notice(request):
+    username  = request.GET.get("username")
+    print(username)
+    text = request.GET.get("textarea")
+    print(username)
+    models.User_group.objects.filter(username = username).update(text = text)
+    return Response()

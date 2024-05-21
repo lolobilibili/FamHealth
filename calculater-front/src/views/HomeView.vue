@@ -422,10 +422,13 @@ export default {
       fe_name:["bmi","肺活量","50m","坐位体前屈","立定跳远","仰卧起坐","800m"],
       unit:["","ml",'s','cm','cm','个',''],
       pass_data:{}, //传递的参数
-
+      username:""
       
       
     }
+  },
+  mounted() {
+    this.username=this.$route.query.username
   },
   methods: {
    
@@ -469,7 +472,8 @@ export default {
           jump,
           run_1000,
           bmi,
-          label
+          label,
+          username:this.username
         }
         //获取传递的参数
         this.pass_data=data_pro
@@ -524,6 +528,7 @@ export default {
       },
       
       async getAllScore(data){
+        console.log(data)
         //调用后端接口，获取各项成绩和总成绩
          await this.$http.get('/data/',{
           params:data

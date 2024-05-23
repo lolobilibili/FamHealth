@@ -259,6 +259,8 @@ def button_adjust(label, option, score, flag):
 
 @api_view(['GET'])
 def get_data(request):
+    height=float(request.GET.get("height"))
+    weight = float(request.GET.get("weight"))
     bmi = float(request.GET.get("bmi"))
     vital_capacity = float(request.GET.get("vital_capacity"))
     run_50 = float(request.GET.get("run_50"))
@@ -275,7 +277,7 @@ def get_data(request):
     each_score = all_score
     suggestion = give_suggest(label, each_score)
     data = [
-        {'name': 'bmi', 'performance': round(performance[0],2), 'score': all_score[0]},
+        {'name': 'bmi','height':height,'weight':weight, 'performance': round(performance[0],2), 'score': all_score[0]},
         {'name': 'vital_capacity', 'performance': performance[1], 'score': all_score[1]},
         {'name': 'run_50', 'performance': performance[2], 'score': all_score[2]},
         {'name': 'sit_and_reach', 'performance': performance[3], 'score': all_score[3]},
@@ -286,7 +288,7 @@ def get_data(request):
     ]
     models.Score_record.objects.update_or_create(
         username=username,
-        defaults={'bmi':round(performance[0],2),'vital_capacity':performance[1],'run_50':performance[2],'sit_and_reach':performance[3],'jump':performance[4],'Pull_ups_and_sit_ups':performance[5],'run_1000':performance[6],'run_1000_performance':numTorun(performance[6]),'bmi_score':all_score[0],'vital_capacity_score':all_score[1],'run_50_score':all_score[2],'sit_and_reach_score':all_score[3],'jump_score':all_score[4],'Pull_ups_and_sit_ups_score':all_score[5],'run_1000_score':all_score[6],'score':score,'suggestion':suggestion}
+        defaults={'weight':weight,'height':height,'bmi':round(performance[0],2),'vital_capacity':performance[1],'run_50':performance[2],'sit_and_reach':performance[3],'jump':performance[4],'Pull_ups_and_sit_ups':performance[5],'run_1000':performance[6],'run_1000_performance':numTorun(performance[6]),'bmi_score':all_score[0],'vital_capacity_score':all_score[1],'run_50_score':all_score[2],'sit_and_reach_score':all_score[3],'jump_score':all_score[4],'Pull_ups_and_sit_ups_score':all_score[5],'run_1000_score':all_score[6],'score':score,'suggestion':suggestion}
     )
     return Response(data)
 
@@ -304,7 +306,7 @@ def get_data_by_username(request):
     data=models.Score_record.objects.filter(username=username)[0]
     # print(data[0].bmi)
     data = [
-        {'name': 'bmi', 'performance': data.bmi, 'score': data.bmi_score},
+        {'name': 'bmi','height':data.height,'weight':data.weight, 'performance': data.bmi, 'score': data.bmi_score},
         {'name': 'vital_capacity', 'performance': data.vital_capacity, 'score': data.vital_capacity_score}, 
         {'name': 'run_50', 'performance': data.run_50, 'score': data.run_50_score},
         {'name': 'sit_and_reach', 'performance': data.sit_and_reach, 'score': data.sit_and_reach_score},
@@ -353,7 +355,7 @@ def get_data_by_group(request):
     for data in records:
         item = [
         {'username':data.username},
-        {'name': 'bmi', 'performance': data.bmi, 'score': data.bmi_score},
+        {'name': 'bmi','height':data.height,'weight':data.weight, 'performance': data.bmi, 'score': data.bmi_score},
         {'name': 'vital_capacity', 'performance': data.vital_capacity, 'score': data.vital_capacity_score}, 
         {'name': 'run_50', 'performance': data.run_50, 'score': data.run_50_score},
         {'name': 'sit_and_reach', 'performance': data.sit_and_reach, 'score': data.sit_and_reach_score},

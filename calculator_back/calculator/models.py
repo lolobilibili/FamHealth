@@ -56,10 +56,13 @@ class User_group(models.Model):
 
 class Score_record(models.Model):
   username = models.CharField(max_length=100,primary_key=True)
+  height = models.FloatField(default=0)
+  weight = models.FloatField(default=0)
   bmi = models.FloatField(default=0)
   vital_capacity = models.IntegerField(default=0)
   run_50 = models.FloatField(default=0)
   sit_and_reach = models.FloatField(default=0)
+
   jump = models.FloatField(default=0)
   Pull_ups_and_sit_ups = models.IntegerField(default=0)
   run_1000 = models.FloatField(default=0)

@@ -5,6 +5,7 @@ import chatbase from '../components/chatbase.vue'
 import login from '../components/login.vue'
 import nav from '../components/nav.vue'
 import fnotice from '../components/fnotice.vue'
+import signup from '../components/signup.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -59,6 +60,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: fnotice
   },
+  {
+    path:'/signup',
+    name:'signup',
+    component:signup
+  }
 ]
 
 const router = new VueRouter({

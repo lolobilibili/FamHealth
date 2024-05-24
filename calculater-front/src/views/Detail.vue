@@ -237,7 +237,7 @@ export default {
       //回到首页
       // console.log("点击了返回")
       // this.$router.push({path:'/'})
-      this.$router.push({ path:  '/'})
+      this.$router.push({ path:  '/nav',query:{username:this.$route.query.username}})
     },
     async get_data(){
       console.log(this.pass_data)

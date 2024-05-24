@@ -83,10 +83,6 @@
               v-model="ruleForm.radio1"
               style="margin-left: 120px; width: 800px; height: 50px"
             >
-              <el-radio-button label="大一"></el-radio-button>
-              <el-radio-button label="大二"></el-radio-button>
-              <el-radio-button label="大三"></el-radio-button>
-              <el-radio-button label="大四"></el-radio-button>
             </el-radio-group>
           </div>
           <div class="sex" style="margin-top: 20px">
@@ -669,7 +665,7 @@ export default {
         //进行route的push跳转
         this.$router.push({
           path: "/detail",
-          query: { data: this.result_data, pass_data: this.pass_data },
+          query: { data: this.result_data, pass_data: this.pass_data,username:this.username },
         });
       }, 2000);
     },

@@ -1,9 +1,8 @@
 <template>
-  <div class ="wholepage">
   <div class="loginbox" style="text-align: center;" >
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" label-height="500px" class="demo-ruleForm" style="width: 30%;position:absolute;top:10%;left:50%;transform:translate(50%,50%);">
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" label-height="500px" class="demo-ruleForm" style="width: 30%;position:absolute;top:5%;left:47%;transform:translate(50%,50%);">
       <el-form-item>
-        <h1>用户登录</h1>
+        <h1>用户注册</h1>
       </el-form-item>
 
       <el-form-item label="" prop="username">
@@ -13,16 +12,17 @@
       <el-form-item label="" prop="password">
         <el-input type="password" v-model="ruleForm.password" autocomplete="off" placeholder="请输入密码" ></el-input>
       </el-form-item>
-
+      
+      <el-form-item label="" prop="group">
+        <el-input type="group" v-model="ruleForm.group" autocomplete="off" placeholder="请输入组别" ></el-input>
+      </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
-        <el-button @click="signup('ruleForm')">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
-</div>
 </template>
 
 <script>
@@ -34,6 +34,7 @@
         ruleForm: {
           username: '',
           password: '',
+          group:'',
         },
         rules: {
           username:[
@@ -42,6 +43,9 @@
           ],
           password:[
             {required:true, message:'请输入密码',trigger:'blur'}
+          ],
+          group:[
+            {required:true, message:'请输入组别',trigger:'blur'}
           ]
         }
       };
@@ -51,10 +55,12 @@
         this.$refs[formName].validate((valid) =>{
           if (valid){
             const _this = this
-           
-            var data = Qs.stringify({"username":this.ruleForm.username,"password":this.ruleForm.password})
+            console.log("!!!!!!!!!!")
+            console.log(this.ruleForm.group)
+            var data = Qs.stringify({"username":this.ruleForm.username,"password":this.ruleForm.password,"group":this.ruleForm.group})
+            
             var data1 =  {username:this.ruleForm.username}
-            this.$http.post("/login/",data).then(
+            this.$http.post("/signup/",data).then(
               function (resp) {
                 const flag = resp.data.request['flag']
                 if (flag == 'yes'){
@@ -62,7 +68,7 @@
                  
                   _this.$router.push({path:"/nav",query:data1})
                 }else {
-                  alert("错误登录")
+                  alert("用户已注册，请先登录。")
                 }
               }
             )
@@ -75,18 +81,12 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-      signup(formName){
-        this.$router.push({path:"/signup"})
       }
     }
   }
 </script>
 <style>
 .loginbox{
-  background:rgba(255,255,255,0.5);
-}
-.wholepage{
   height: 100vh;
   width: 100%;
   background:url('../../public/source/background1.jpg') no-repeat center center fixed; background-size: 100%;

@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from drf_yasg.openapi import Parameter, IN_PATH, IN_QUERY, TYPE_STRING, TYPE_INTEGER
+
+import datetime
 # Create your views here.
 
 # 读取项目所需文件
@@ -48,6 +50,14 @@ def Cal_each_2(label, df, performance):
 * 引体向上与仰卧起坐 10%  <u>（引体向上与仰卧起坐需要单独写函数）</u>
 * 耐力跑 20%
 """
+
+
+def get_diff_days(pdate,days):
+    pdate_obj = datetime.datetime.strptime(pdate,"%Y-%m-%d")
+    time_gap = datetime.timedelta(days = days)
+    pdate_result = pdate_obj-time_gap
+    return pdate_result.strftime("%Y-%m-%d")
+ 
 
 
 def Cal_score(label, bmi, vital_capacity, run_50, sit_and_reach, jump, Pull_ups_and_sit_ups, run_1000):
@@ -455,8 +465,39 @@ def sub2(request):
     date = request.GET.get("date")
     username = request.GET.get("username")
     date = date[0:10]
+    dada = []
     print(date)
-    
+    print(get_diff_days(date,6))
+    breakfast = models.dinner.objects.filter(date__range=(get_diff_days("2024-05-23",6),"2024-05-23")).values('date','hot','des')
+    for i in range(7):
+        data = []
+        breakfast= models.breakfast.objects.filter(date = get_diff_days(date,6-i),username = username).values('hot','des')
+        lunch= models.lunch.objects.filter(date = get_diff_days(date,6-i),username = username).values('hot','des')
+        dinner= models.dinner.objects.filter(date = get_diff_days(date,6-i),username = username).values('hot','des')
+        snack= models.snack.objects.filter(date = get_diff_days(date,6-i),username = username).values('hot','des')
+        sport= models.sport.objects.filter(date = get_diff_days(date,6-i),username = username).values('hot','des')
+        if breakfast:
+            data.append({'hot':breakfast[0]['hot'],'des':breakfast[0]['des']})
+        else:
+            data.append({'hot':0,'des':''})
+        if lunch:
+            data.append({'hot':lunch[0]['hot'],'des':lunch[0]['des']})
+        else:
+            data.append({'hot':0,'des':''})
+        if dinner:
+            data.append({'hot':dinner[0]['hot'],'des':dinner[0]['des']})
+        else:
+            data.append({'hot':0,'des':''})
+        if snack:
+            data.append({'hot':snack[0]['hot'],'des':snack[0]['des']})
+        else:
+            data.append({'hot':0,'des':''})
+        if sport:
+            data.append({'hot':sport[0]['hot'],'des':sport[0]['des']})
+        else:
+            data.append({'hot': 0, 'des': ''})
+        dada.append(data)
+    print(dada)
     data = []
     #获取五种行动消耗的热量和对应的描述
     breakfast= models.breakfast.objects.filter(date = date,username = username).values('hot','des')
@@ -484,8 +525,13 @@ def sub2(request):
         data.append({'hot':sport[0]['hot'],'des':sport[0]['des']})
     else:
         data.append({'hot':0,'des':''})
+    data.append(dada)
     print(data)
+
+
+
     return Response(data)
+
 
 
 
@@ -525,6 +571,30 @@ def login(request):
 	date = {'flag':date_flag,'msg': date_msg}
 
 	return JsonResponse({'request': date})
+
+@api_view(['POST'])
+def signup(request):
+	username = request.POST.get("username")
+	password = request.POST.get("password")
+	group = request.POST.get("group")
+	try:
+		user = models.User.objects.get(username=username)
+	except:
+		models.User.objects.create(username = username,password = password)
+		models.User_group.objects.create(username = username,group_id = group,text='')
+		date = {'flag': 'no', "msg" : "no to user"}
+		date_flag = "yes"
+		date_msg = "注册成功。"
+		date = {'flag':date_flag,'msg': date_msg}
+		return JsonResponse({'request':date})
+	
+	date = {'flag': 'no', "msg" : "no to user"}
+	date_msg = "用户已注册，请先登录。"
+	date_flag = "no"
+	date = {'flag':date_flag,'msg': date_msg}
+
+	return JsonResponse({'request': date})
+
 @api_view(['GET'])
 def fnotice(request):
     username = request.GET.get("username")

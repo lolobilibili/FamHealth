@@ -51,7 +51,7 @@ urlpatterns = [
     path('update_notice/',views.update_notice),
     path('get_user_data/',views.get_data_by_username),
     path('get_data_by_group/',views.get_data_by_group),
-    
+    path('signup/',views.signup)    
 ]
 
 
